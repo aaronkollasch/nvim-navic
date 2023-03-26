@@ -55,6 +55,7 @@ local config = {
 	separator = " > ",
 	depth_limit = 0,
 	depth_limit_indicator = "..",
+	depth_limit_align = "right",
 	safe_output = true,
 	lazy_update_context = false,
 	click = false,
@@ -141,6 +142,9 @@ function M.setup(opts)
 	if opts.depth_limit_indicator ~= nil then
 		config.depth_limit_indicator = opts.depth_limit_indicator
 	end
+	if opts.depth_limit_align ~= nil then
+		config.depth_limit_align = opts.depth_limit_align
+	end
 	if opts.highlight ~= nil then
 		config.highlight = opts.highlight
 	end
@@ -218,6 +222,9 @@ function M.format_data(data, opts)
 		end
 		if opts.depth_limit_indicator ~= nil then
 			local_config.depth_limit_indicator = opts.depth_limit_indicator
+		end
+		if opts.depth_limit_align ~= nil then
+			config.depth_limit_align = opts.depth_limit_align
 		end
 		if opts.highlight ~= nil then
 			local_config.highlight = opts.highlight
@@ -306,11 +313,20 @@ function M.format_data(data, opts)
 	end
 
 	if local_config.depth_limit ~= 0 and #location > local_config.depth_limit then
-		location = vim.list_slice(location, #location - local_config.depth_limit + 1, #location)
-		if local_config.highlight then
-			table.insert(location, 1, "%#NavicSeparator#" .. local_config.depth_limit_indicator .. "%*")
+		if local_config.depth_limit_align == "left" then
+			location = vim.list_slice(location, 1, math.min(#location, local_config.depth_limit))
+			if local_config.highlight then
+				table.insert(location, "%#NavicSeparator#" .. local_config.depth_limit_indicator .. "%*")
+			else
+				table.insert(location, local_config.depth_limit_indicator)
+			end
 		else
-			table.insert(location, 1, local_config.depth_limit_indicator)
+			location = vim.list_slice(location, #location - local_config.depth_limit + 1, #location)
+			if local_config.highlight then
+				table.insert(location, 1, "%#NavicSeparator#" .. local_config.depth_limit_indicator .. "%*")
+			else
+				table.insert(location, 1, local_config.depth_limit_indicator)
+			end
 		end
 	end
 

@@ -85,6 +85,7 @@ Use the `setup` function to modify default parameters.
 * `depth_limit_indicator` : Icon to indicate that `depth_limit` was hit and the shown context is truncated.
 * `format_text` : A function to customize the text displayed in each segment.
 * `lazy_update_context` : If true, turns off context updates for the "CursorMoved" event.
+* `depth_limit_align` : Whether to keep the left or right side of the context after truncation. (default: "right")
 * `safe_output` : Sanitize the output for use in statusline and winbar.
 * `click` : Single click to goto element, double click to open nvim-navbuddy on the clicked element.
 * `lsp` :
